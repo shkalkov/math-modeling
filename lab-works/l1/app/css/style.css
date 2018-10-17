@@ -1,0 +1,59 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.wrapper {
+    margin: 0 auto;
+    max-width: 1280px;
+}
+
+.row {
+    display: flex;
+}
+
+.charts {
+    width: 70%;
+    padding-top: 20px;
+}
+
+.control {
+    width: 30%;
+    margin-left: auto;
+    padding-top: 20px;
+}
+canvas {
+    min-width: 100%;
+}
+
+table {
+    border-collapse: separate; /* Способ отображения границы */ 
+    width: 100%; /* Ширина таблицы */ 
+    border-spacing: 0;
+    margin-top: 20px;
+}
+
+tr, td {
+    border: 1px solid black;
+}
+
+td {
+    padding: 5px;
+}
+
+button {
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+input {
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 50%;
+}
+
+.history-block {
+    padding: 5px;
+    height: 100vh;
+    overflow: scroll;
+}
