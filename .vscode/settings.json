@@ -1,0 +1,10 @@
+{
+   "javascript.format.enable": false,
+   "javascript.referencesCodeLens.enabled": true,
+   "typescript.surveys.enabled": false,
+   "tslint.jsEnable": true,
+   "typescript.validate.enable": false,
+   "prettier.eslintIntegration": true,
+   "prettier.tslintIntegration": true,
+   "eslint.autoFixOnSave": true
+}

@@ -1,11 +1,11 @@
 import typescript from 'rollup-plugin-typescript';
 
 export default {
-   input: './lab-works/l1/src/rngs/index.ts',
+   input: './lab-works/l2/src/index.ts',
    output: {
-      file: './lab-works/l1/app/js/bundle.js',
+      file: './lab-works/l2/app/js/bundle.js',
       format: 'iife',
-      name: 'l1'
+      name: 'l2'
    },
    plugins: [typescript()]
 };

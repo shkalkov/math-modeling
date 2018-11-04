@@ -1,5 +1,16 @@
 {
    "tabWidth": 3,
    "useTabs": false,
-   "singleQuote": true
+   "singleQuote": true,
+   "arrowParens": "always",
+   "semi": true,
+   "trailingComma": "all",
+   "overrides": [
+      {
+         "files": "*.ts",
+         "options": {
+            "tabWidth": 4
+         }
+      }
+   ]
 }

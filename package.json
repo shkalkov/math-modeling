@@ -4,8 +4,11 @@
    "description": "",
    "main": "index.js",
    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "bundle": "rollup --config"
+      "bundle": "rollup --config && exit 0",
+      "npm-lint": "eslint lab-works/l2/app/js/**/*.js; true",
+      "npm-lint--fix": "eslint lab-works/l2/app/js/**/*.js --fix; true",
+      "lint": "yarn run npm-lint",
+      "fix": "yarn run npm-lint--fix"
    },
    "repository": {
       "type": "git",

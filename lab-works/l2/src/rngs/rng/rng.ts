@@ -1,4 +1,4 @@
-import { expectedValue } from '../helpers/mathStat';
+import { expectedValue } from '../../helpers/mathStat';
 
 /**
  * @class RNG - random number generator
@@ -24,7 +24,13 @@ export default abstract class RNG {
     }
 
     variance(): number {
-        return this.randomNumbers.reduce((accumulator, currentValue) => accumulator + currentValue ** 2) / this.randomNumbers.length - this.expectedValue() ** 2;
+        return (
+            this.randomNumbers.reduce(
+                (accumulator, currentValue) => accumulator + currentValue ** 2
+            ) /
+                this.randomNumbers.length -
+            this.expectedValue() ** 2
+        );
     }
 
     arrayIndexesExpValue(): number {
