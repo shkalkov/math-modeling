@@ -1,329 +1,293 @@
 // @ts-nocheck
 (function() {
-   const normalizeToDraw = (array = []) =>
-      array.map((element, index) => ({
-         x: index + 1,
-         y: element.toFixed(3),
-         r: 0.2,
-      }));
-
-   const generateIntervals = (quantityOfIntervals = 10, from = 0, to = 1) => {
-      const arrayOfIntervals = [];
-      const intervalStep = -(from - to) / quantityOfIntervals;
-      let currentInterval = from;
-      for (
-         let step = 1;
-         step <= quantityOfIntervals;
-         step += 1, currentInterval += intervalStep
-      ) {
-         if (step !== 1) arrayOfIntervals.push(currentInterval);
-      }
-      arrayOfIntervals.push(currentInterval);
-
-      return arrayOfIntervals;
+   const config = {
+      randomVariables: [
+         {
+            headers: {
+               x: [1, 2],
+               y: [10, 20],
+            },
+            data: [[0.5, 0.15], [0.22, 0.13]],
+         },
+         {
+            headers: {
+               x: [1, 2, 3, 4],
+               y: [10, 20, 30, 40],
+            },
+            data: [
+               [0, 0.11, 0.12, 0.03],
+               [0, 0.13, 0.09, 0.02],
+               [0.02, 0.11, 0.08, 0.01],
+               [0.03, 0.11, 0.05, 0.09],
+            ],
+            check: [132.95, 0.6418, -0.00736],
+         },
+         {
+            headers: {
+               x: [1, 2, 3, 4, 5],
+               y: [10, 20, 30, 40, 50],
+            },
+            data: [
+               [0.02, 0.04, 0, 0, 0],
+               [0, 0.06, 0.03, 0, 0],
+               [0, 0, 0.06, 0.45, 0.04],
+               [0, 0, 0.02, 0.08, 0.06],
+               [0, 0, 0, 0.04, 0.1],
+            ],
+         },
+         {
+            headers: {
+               x: [1, 2, 3, 4, 5],
+               y: [10, 20, 30, 40, 50],
+            },
+            data: [
+               [0, 0, 0, 0, 0],
+               [0, 0, 0, 0, 0],
+               [0, 0, 0, 0.45, 0],
+               [0, 0.55, 0, 0, 0],
+               [0, 0, 0, 0, 0],
+            ],
+         },
+         {
+            headers: {
+               x: [1, 2, 3, 4],
+               y: [10, 20, 30, 40, 50],
+            },
+            data: [
+               [0, 0, 0, 0],
+               [0, 0, 0, 0],
+               [0, 0, 0, 0.45],
+               [0, 0.55, 0, 0],
+               [0, 0, 0, 0],
+            ],
+         },
+      ],
    };
 
-   const countInIntervals = (array, intervals) => {
-      const arrayCopy = array.slice();
-      const arr = [];
-      let buff = 0;
-      const arrayCopyLength = arrayCopy.length;
-      for (let indx = 0; indx < intervals.length; indx += 1) {
-         if (indx !== 0) arr.push(buff / arrayCopyLength);
-         buff = 0;
-         for (let index = 0; index < arrayCopyLength; index += 1) {
-            if (arrayCopy[index] && arrayCopy[index] <= intervals[indx]) {
-               buff += 1;
-               delete arrayCopy[index];
+   const numberNormalise = (number) => +parseFloat(number).toPrecision(12);
+
+   const rowSum = (data = []) => {
+      const P = [];
+      data.forEach((element) => {
+         P.push(numberNormalise(element.reduce((a, b) => a + b)));
+      });
+
+      return P;
+   };
+
+   const columnSum = (data = []) => {
+      const P = [];
+      const rowCount = data.length;
+      const columnCount = data[rowCount - 1].length;
+
+      if (rowCount === columnCount) {
+         for (let iRow = 0; iRow < data.length; iRow += 1) {
+            let sum = 0;
+
+            for (let iColumn = 0; iColumn < data[iRow].length; iColumn += 1) {
+               sum += data[iColumn][iRow];
             }
+
+            P.push(numberNormalise(sum));
          }
       }
 
-      arr.push(buff / arrayCopyLength);
-
-      return arr;
+      return P;
    };
 
-   const config = {
-      countOfDigits: +document.querySelector('#countOfDigits').value || 10000,
-      countOfIntervals:
-         +document.getElementById('countOfIntervals').value || 20,
-      chartsCtx: {
-         randomNumbers: document.getElementById('randomDigitsChart'),
-         intervalsBar: document.getElementById('bar'),
-      },
+   const normalizeDistributionRange = (x, p) => [x, p];
+
+   // const statValues = (data) => {
+   //    // const values = [(expectedValue = 0), (variance = 0), (sigma = 0)];
+   //    const values = {
+   //       expectedValue: 0,
+   //       variance: 0,
+   //       sigma: 0,
+   //    };
+   //    const buf = [].concat(...data);
+   //    for (let index = 0; index < buf.length / 2; index += 1) {
+   //       values.expectedValue += buf[index] * buf[index + buf.length / 2];
+   //       values.variance += buf[index] ** 2 * buf[index + buf.length / 2];
+   //    }
+
+   //    values.variance -= values.expectedValue ** 2;
+
+   //    values.sigma = Math.sqrt(values.variance);
+
+   //    return values;
+   // };
+
+   // const correlation = (x, y, data, mx, my) => {
+   //    const headers = [x, y];
+   //    const dataLine = [].concat(...data);
+   //    let sum = 0;
+   //    let i = 0;
+   //    for (let j = 0; j < headers[0].length; j += 1) {
+   //       for (let k = 0; k < headers[1].length; k += 1) {
+   //          sum += dataLine[i] * headers[1][j] * headers[0][k];
+   //          i += 1;
+   //       }
+   //    }
+
+   //    return numberNormalise(sum - mx * my);
+   // };
+
+   const expectedValue = (x) => {
+      let value = 0;
+      const buf = [].concat(...x);
+      for (let index = 0; index < buf.length / 2; index += 1) {
+         value += buf[index] * buf[index + buf.length / 2];
+      }
+
+      return value;
    };
 
-   const startObject = (obj) => new Promise((res) => res(obj));
+   const variance = (x) => {
+      let value = 0;
+      const buf = [].concat(...x);
+      for (let index = 0; index < buf.length / 2; index += 1) {
+         value += buf[index] ** 2 * buf[index + buf.length / 2];
+      }
 
-   window.onload = () => {
+      return value - expectedValue(x) ** 2;
+   };
+
+   const correlation2 = (headers, data, x, y) => {
+      // const headersLine = [...headers];
+      const dataLine = data;
+
+      let sum = 0;
+      let i = 0;
+      for (let j = 0; j < headers[0].length; j += 1) {
+         for (let k = 0; k < headers[1].length; k += 1) {
+            sum += dataLine[i] * headers[1][j] * headers[0][k];
+            i += 1;
+         }
+      }
+
+      return numberNormalise(
+         (sum - expectedValue(x) * expectedValue(y)) /
+            (Math.sqrt(variance(x)) * Math.sqrt(variance(y))),
+      );
+   };
+
+   const start = (obj) => {
       try {
-         const promObject = new l2.Normal(0, 1, 12);
-         promObject.generate(10000);
+         const [data] = [obj.data];
 
-         /*          const intervals = generateIntervals(
-            config.countOfIntervals,
-            Math.min.apply(null, promObject.randomNumbers),
-            Math.max.apply(null, promObject.randomNumbers),
-         ); */
+         console.table(data);
 
-         /*          startObject(promObject.randomNumbers)
-            .then((data) => normalizeToDraw(data))
-            .then(
-               (result) =>
-                  new Chart(config.chartsCtx.randomNumbers, {
-                     type: 'bubble',
-                     data: {
-                        datasets: [
-                           {
-                              borderColor: 'red',
-                              data: result,
-                           },
-                        ],
-                     },
-                     options: {
-                        animation: {
-                           duration: 0,
-                        },
-                        tooltips: {
-                           enabled: false,
-                        },
-                        hover: {
-                           mode: null,
-                        },
-                        legend: {
-                           display: false,
-                        },
-                        title: {
-                           display: false,
-                        },
-                        scales: {
-                           xAxes: [
-                              {
-                                 ticks: {
-                                    beginAtZero: true,
-                                    autoSkip: true,
-                                 },
-                              },
-                           ],
-                           yAxes: [
-                              {
-                                 ticks: {
-                                    beginAtZero: true,
-                                    autoSkip: true,
-                                 },
-                              },
-                           ],
-                        },
-                     },
-                  }),
-            )
-            .catch((error) => console.log(error));
+         const check = [].concat(...data).reduce((a, b) => a + b);
 
-         startObject(promObject.randomNumbers)
-            .then((data) => countInIntervals(data, intervals))
-            .then(
-               (result) =>
-                  new Chart(config.chartsCtx.intervalsBar, {
-                     type: 'bar',
-                     data: {
-                        labels: intervals.map((el) => el.toFixed(3)),
-                        datasets: [
-                           {
-                              data: result,
-                              borderWidth: 0.5,
-                              borderColor: 'red',
-                           },
-                           {
-                              type: 'line',
-                              data: result,
-                              borderColor: 'blue',
-                              borderWidth: 0.5,
-                              fill: false,
-                           },
-                        ],
-                     },
-                     options: {
-                        animation: {
-                           duration: 0,
-                        },
-                        legend: {
-                           display: false,
-                        },
-                     },
-                  }),
-            )
-            .catch((error) => console.log(error)); */
+         console.log(check);
 
-         /*          const calculateStatValues = async (obj) => {
-            await Promise.all([
-               (document.querySelector(
-                  '#expected',
-               ).innerHTML = await obj.expectedValue().toFixed(5)),
-               (document.querySelector(
-                  '#variance',
-               ).innerHTML = await obj.variance().toFixed(5)),
-            ]);
-         }; */
+         const rowProbability = rowSum(data);
+         const columnProbability = columnSum(obj.data);
 
-         const drawRandomNumbers = async (
-            data,
-            ctx = config.chartsCtx.randomNumbers,
-         ) => {
-            const numbers = await normalizeToDraw(data);
-            const chart = await new Chart(ctx, {
-               type: 'bubble',
-               data: {
-                  datasets: [
-                     {
-                        borderColor: 'red',
-                        data: numbers,
-                     },
-                  ],
-               },
-               options: {
-                  animation: {
-                     duration: 0,
-                  },
-                  tooltips: {
-                     enabled: false,
-                  },
-                  hover: {
-                     mode: null,
-                  },
-                  legend: {
-                     display: false,
-                  },
-                  title: {
-                     display: false,
-                  },
-                  scales: {
-                     xAxes: [
-                        {
-                           ticks: {
-                              beginAtZero: true,
-                              autoSkip: true,
-                           },
-                        },
-                     ],
-                     yAxes: [
-                        {
-                           ticks: {
-                              beginAtZero: true,
-                              autoSkip: true,
-                           },
-                        },
-                     ],
-                  },
-               },
-            });
+         const headersLine = [obj.headers.x, obj.headers.y];
+         const dataLine = [].concat(...data);
 
-            return chart;
-         };
-
-         const drawIntervalsBar = async (data, ctx) => {
-            const interval = await generateIntervals(
-               config.countOfIntervals,
-               Math.min.apply(null, promObject.randomNumbers),
-               Math.max.apply(null, promObject.randomNumbers),
-            );
-            const countIntervals = await countInIntervals(data, interval);
-            const chart = await new Chart(ctx, {
-               type: 'bar',
-               data: {
-                  labels: interval.map((el) => el.toFixed(3)),
-                  datasets: [
-                     {
-                        data: countIntervals,
-                        borderWidth: 0.5,
-                        borderColor: 'red',
-                     },
-                     {
-                        type: 'line',
-                        data: countIntervals,
-                        borderColor: 'blue',
-                        borderWidth: 0.5,
-                        fill: false,
-                     },
-                  ],
-               },
-               options: {
-                  animation: {
-                     duration: 0,
-                  },
-                  legend: {
-                     display: false,
-                  },
-               },
-            });
-
-            return chart;
-         };
-
-         Promise.all([
-            drawRandomNumbers(
-               promObject.randomNumbers,
-               config.chartsCtx.randomNumbers,
-            ),
-            drawIntervalsBar(
-               promObject.randomNumbers,
-               config.chartsCtx.intervalsBar,
-            ),
-         ]);
-
-         // calculateStatValues(promObject);
-
-         /*          drawRandomNumbers(
-            promObject.randomNumbers,
-            config.chartsCtx.randomNumbers,
+         const x = normalizeDistributionRange(headersLine[1], rowProbability);
+         const y = normalizeDistributionRange(
+            headersLine[0],
+            columnProbability,
          );
-         drawIntervalsBar(
-            promObject.randomNumbers,
-            config.chartsCtx.intervalsBar,
-         ); */
 
-         /*          document.querySelector(
-            '#expected',
-         ).innerHTML = promObject.expectedValue().toFixed(5);
+         const xVariance = variance(x);
+         const yVariance = variance(y);
 
-         document.querySelector(
-            '#variance',
-         ).innerHTML = promObject.variance().toFixed(5); */
-
-         document
-            .querySelector('#btn-generate')
-            .addEventListener('click', () => {
-               window.location.reload();
-            });
-
-         // document
-         //    .querySelec tor('#btn-generate')
-         //    .addEventListener('click', () => {
-         //       const countOfDigits = document.querySelector('#countOfDigits')
-         //          .value;
-         //       const cl = new l2.Normal(5, 2, 12);
-
-         //       DATA = normalize(cl.generate(countOfDigits));
-
-         //       document.querySelector(
-         //          '#expected'
-         //       ).innerHTML = cl.expectedValue().toFixed(5);
-         //       document.querySelector(
-         //          '#variance'
-         //       ).innerHTML = cl.variance().toFixed(5);
-
-         //       randomNumbersBubbleChart.data.datasets[0].data = DATA;
-
-         //       randomNumbersBarChart.data.datasets[0].data = countInIntervals(
-         //          cl.randomNumbers,
-         //          intervals
-         //       );
-
-         //       randomNumbersBarChart.update();
-         //       randomNumbersBubbleChart.update();
-         //    })
+         const correlation = correlation2(headersLine, dataLine, y, x);
+         console.log(xVariance);
+         console.log(yVariance);
+         console.log(correlation);
       } catch (error) {
-         console.log(`${error} \n ${error.stack}`);
+         console.log(error.stack);
       }
    };
+
+   start(config.randomVariables[1]);
+
+   // const start = () => {
+   //    const headers = config.randomVariables[0].headers;
+   //    const headerX = config.randomVariables[0].headers.x;
+   //    const headerY = config.randomVariables[0].headers.y;
+   //    const data = config.randomVariables[0].data;
+
+   //    const headersLine = [headerX, headerY];
+
+   //    const dataLine = [].concat(...data);
+
+   //    console.log(
+   //       correlation2(
+   //          headersLine,
+   //          dataLine,
+   //          normalizeDistributionRange(
+   //             config.randomVariables[0].headers.y,
+   //             rowSum(config.randomVariables[0].data),
+   //          ),
+   //          normalizeDistributionRange(
+   //             config.randomVariables[0].headers.x,
+   //             columnSum(config.randomVariables[0].data),
+   //          ),
+   //       ),
+   //    );
+
+   //    // console.log(
+   //    //    correlation(
+   //    //       headerX,
+   //    //       headerY,
+   //    //       dataLine,
+   //    //       statValues(
+   //    //          normalizeDistributionRange(
+   //    //             config.randomVariables[0].headers.y,
+   //    //             calculateRowDistributonRange(config.randomVariables[0].data),
+   //    //          ),
+   //    //       ).expectedValue,
+   //    //       statValues(
+   //    //          normalizeDistributionRange(
+   //    //             config.randomVariables[0].headers.x,
+   //    //             calculateColumnDistributonRange(
+   //    //                config.randomVariables[0].data,
+   //    //             ),
+   //    //          ),
+   //    //       ).expectedValue,
+   //    //    ),
+   //    // );
+
+   //    // console.log(
+   //    //    statValues(
+   //    //       normalizeDistributionRange(
+   //    //          config.randomVariables[0].headers.y,
+   //    //          rowSum(config.randomVariables[0].data),
+   //    //       ),
+   //    //    ),
+   //    // );
+
+   //    // console.log(
+   //    //    statValues(
+   //    //       normalizeDistributionRange(
+   //    //          config.randomVariables[0].headers.x,
+   //    //          columnSum(config.randomVariables[0].data),
+   //    //       ),
+   //    //    ),
+   //    // );
+
+   //    // console.table(
+   //    //    calculateRowDistributonRange(config.randomVariables[0].data),
+   //    // );
+   //    // console.log(calculateColumnDistributonRange(config.data));
+   //    // const a = normalizeDistributionRange(
+   //    //    config.randomVariables[0].headers.x,
+   //    //    calculateColumnDistributonRange(config.randomVariables[0].data),
+   //    // );
+
+   //    // console.table(statValues(config.randomVariables[0].data));
+
+   //    // const check = [].concat(...config.data).reduce((a, b) => a + b);
+   //    // console.log(check);
+   // };
+
+   // start();
+
+   // window.onload = () => {};
 })();
