@@ -166,10 +166,7 @@
             ]);
          }; */
 
-         const drawRandomNumbers = async (
-            data,
-            ctx = config.chartsCtx.randomNumbers,
-         ) => {
+         const drawRandomNumbers = async (data, ctx) => {
             const numbers = await normalizeToDraw(data);
             const chart = await new Chart(ctx, {
                type: 'bubble',
