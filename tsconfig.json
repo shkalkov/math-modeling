@@ -3,7 +3,8 @@
       "module": "es6",
       "target": "es6",
       "outDir": "./app",
-      "removeComments": true
+      "removeComments": true,
+      "typeRoots": ["node_modules/@types/"]
    },
-   "exclude": ["node_modules", "/lab-works/l2/app"]
+   "exclude": ["node_modules", "**.min.js", "lab-works/l2/app/"]
 }

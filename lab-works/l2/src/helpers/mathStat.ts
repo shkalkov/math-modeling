@@ -20,34 +20,3 @@ export const correlation = (x: number[], y: number[]): number => {
 
     return cov / (Math.sqrt(dispX / x.length) * Math.sqrt(dispY / y.length));
 };
-
-// const getNumbersInInterval = (array: number[], interval: number) =>
-// 	array.filter(number => number <= interval);
-// export namespace MathStat {
-// 	export function expecedValue(arr: number[], callback: any): number {
-// 		let sum = arr.reduce(callback);
-// 		return sum / arr.length;
-// 	}
-
-// 	export function variance(array: number[]): number {
-// 		return (
-// 			Helpers.expecedValue(array, Helpers.reducers.powSum) -
-// 			expecedValue(array, Helpers.reducers.sum) ** 2
-// 		);
-// 	}
-
-// 	export function correlation(x: number[], y: number[]): number {
-// 		let expXY = 0;
-// 		for (let index = 0; index < x.length; index++) {
-// 			expXY = x[index] * y[index];
-// 		}
-
-// 		expXY = expXY / x.length;
-// 		return (
-// 			(expXY -
-// 				expecedValue(x, Helpers.reducers.sum) *
-// 					expecedValue(y, Helpers.reducers.sum)) /
-// 			Math.sqrt(variance(x) * variance(y))
-// 		);
-// 	}
-// }

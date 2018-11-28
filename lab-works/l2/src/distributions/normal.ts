@@ -18,21 +18,21 @@ export class Normal extends RNG {
                 this.mi +
                     this.sigma *
                         Math.sqrt(12 / this.n) *
-                        (sumRandom(this.n) - this.n / 2)
+                        (sumRandom(this.n) - this.n / 2),
             );
         }
         return this.randomNumbers;
     }
 
-    distribute(mi: number, sigma: number, n: number): number[] {
-        if (this.randomNumbers) {
-            this.randomNumbers.map(
-                (element) =>
-                    (element =
-                        mi + sigma * Math.sqrt(12 / n) * (sumRandom(n) - n / 2))
-            );
-        }
+    // distribute(mi: number, sigma: number, n: number): number[] {
+    //     if (this.randomNumbers) {
+    //         this.randomNumbers.map(
+    //             (element) =>
+    //                 (element =
+    //                     mi + sigma * Math.sqrt(12 / n) * (sumRandom(n) - n / 2))
+    //         );
+    //     }
 
-        return this.randomNumbers;
-    }
+    //     return this.randomNumbers;
+    // }
 }

@@ -20,6 +20,12 @@
          "request": "launch",
          "name": "Запустить программу",
          "program": "${workspaceFolder}/lab-works/l2/app/js/index.js"
+      },
+      {
+         "type": "node",
+         "request": "launch",
+         "name": "Stat values",
+         "program": "${workspaceFolder}/lab-works/l2/app/js/statValues.js"
       }
    ]
 }

@@ -1,10 +1,8 @@
 const l2 = (function(exports) {
-   const expectedValue = (array) =>
-      array.reduce((accumulator, currentValue) => accumulator + currentValue) /
-      array.length;
+   const expectedValue = (data) =>
+      data.reduce((res, value) => res + value) / data.length;
 
-   const variance = (array) =>
-      expectedValue(array) - Math.pow(expectedValue(array), 2);
+   const variance = (data) => expectedValue(data) - expectedValue(data) ** 2;
 
    const correlation = (x, y) => {
       const expectedX = expectedValue(x);

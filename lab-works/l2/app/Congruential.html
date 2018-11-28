@@ -2,69 +2,102 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>L2 / Congruential</title>
+  <link rel="stylesheet" href="./css/style.css" />
   <script src="../../../node_modules/chart.js/dist/Chart.bundle.min.js" async></script>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script> -->
   <script src="./js/bundle.js" async></script>
   <script src="./js/vue.min.js" defer></script>
-  <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
   <main class="wrapper">
     <div class="row">
+
       <div class="charts">
-        <canvas id="randomDigitsChart"></canvas>
-        <br>
         <canvas id="bar"></canvas>
+        <hr /><br>
+        <canvas id="randomDigitsChart"></canvas> <br />
       </div>
+
       <div class="control">
-        <input type="text" name="count" id="countOfDigits" value="1000">
-        <input type="text" name="count" id="countOfIntervals" value="">
+        <input id="countOfDigits" type="text" name="count" value="" />
+        <input id="countOfIntervals" type="text" name="count" value="" />
         <button id="btn-generate">Generate</button>
 
         <table>
           <tr>
-            <td>Expected Value</td>
-            <td>Variance</td>
+            <td>Мат. ожидание</td>
+            <td>Дисперсия</td>
+            <td>СКО</td>
           </tr>
           <tr>
             <td id="expected"></td>
             <td id="variance"></td>
+            <td id="sko"></td>
           </tr>
         </table>
-        <div class="history-block">
-          <table id="history">
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Expected value</th>
-                <th>Variance</th>
-              </tr>
-            </thead>
-            <tbody v-for="row in rows">
-              <tr>
-                <td>{{row.seed}}</td>
-                <td rowspan="3">{{row.expectedValu}}</td>
-                <td rowspan="3">{{row.varianc}}</td>
-              </tr>
-              <tr>
-                <td>{{row.multiplier}}</td>
-              </tr>
-              <tr>
-                <td>{{row.modulo}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <td>Выб. ср.</td>
+              <td>Выб. дисп.</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="sampleMean"></td>
+              <td id="sampleVariance"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="ciev" style="text-align: center">
+          <thead>
+            <tr>
+              <th colspan="5" style="text-align: center">
+                Интервальная оценка мат. ожидания
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="cievmin"></td>
+              <td>&#10877;</td>
+              <td id="">Mx</td>
+              <td>&#60;</td>
+              <td id="cievmax"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table class="civ" style="text-align: center">
+          <thead>
+            <tr>
+              <th colspan="5" style="text-align: center">
+                Интервальная оценка дисперсии
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="civmin"></td>
+              <td>&#10877;</td>
+              <td id="">Dx</td>
+              <td>&#60;</td>
+              <td id="civmax"></td>
+            </tr>
+          </tbody>
+        </table>
 
       </div>
     </div>
   </main>
 </body>
-<script src="./js/index.js" defer></script>
+
+<script type="module" src="./js/index.js" defer></script>
 
 </html>
