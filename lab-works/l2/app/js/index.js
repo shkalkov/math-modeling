@@ -113,8 +113,6 @@ import config from './config.js';
          console.log(rowProbability);
          console.log(columnProbability);
 
-         // console.log(`${rowProbability} / ${columnProbability}`);
-
          const headersLine = [obj.headers.x, obj.headers.y];
          const dataLine = [].concat(...data);
 
