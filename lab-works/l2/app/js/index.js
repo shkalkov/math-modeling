@@ -1,68 +1,28 @@
 // @ts-nocheck
+import config from './config.js';
+
 (function() {
-   const config = {
-      randomVariables: [
-         {
-            headers: {
-               x: [1, 2],
-               y: [10, 20],
-            },
-            data: [[0.5, 0.15], [0.22, 0.13]],
-         },
-         {
-            headers: {
-               x: [1, 2, 3, 4],
-               y: [10, 20, 30, 40],
-            },
-            data: [
-               [0, 0.11, 0.12, 0.03],
-               [0, 0.13, 0.09, 0.02],
-               [0.02, 0.11, 0.08, 0.01],
-               [0.03, 0.11, 0.05, 0.09],
-            ],
-            check: [132.95, 0.6418, -0.00736],
-         },
-         {
-            headers: {
-               x: [1, 2, 3, 4, 5],
-               y: [10, 20, 30, 40, 50],
-            },
-            data: [
-               [0.02, 0.04, 0, 0, 0],
-               [0, 0.06, 0.03, 0, 0],
-               [0, 0, 0.06, 0.45, 0.04],
-               [0, 0, 0.02, 0.08, 0.06],
-               [0, 0, 0, 0.04, 0.1],
-            ],
-         },
-         {
-            headers: {
-               x: [1, 2, 3, 4, 5],
-               y: [10, 20, 30, 40, 50],
-            },
-            data: [
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-               [0, 0, 0, 0.45, 0],
-               [0, 0.55, 0, 0, 0],
-               [0, 0, 0, 0, 0],
-            ],
-         },
-         {
-            headers: {
-               x: [1, 2, 3, 4],
-               y: [10, 20, 30, 40, 50],
-            },
-            data: [
-               [0, 0, 0, 0],
-               [0, 0, 0, 0],
-               [0, 0, 0, 0.45],
-               [0, 0.55, 0, 0],
-               [0, 0, 0, 0],
-            ],
-         },
-      ],
-   };
+   const currentData = 1;
+
+   function createTable(tableData) {
+      const table = document.createElement('table');
+      const tableBody = document.createElement('tbody');
+
+      tableData.forEach((rowData) => {
+         const row = document.createElement('tr');
+
+         rowData.forEach((cellData) => {
+            const cell = document.createElement('td');
+            cell.appendChild(document.createTextNode(cellData));
+            row.appendChild(cell);
+         });
+
+         tableBody.appendChild(row);
+      });
+
+      table.appendChild(tableBody);
+      document.body.appendChild(table);
+   }
 
    const numberNormalise = (number) => +parseFloat(number).toPrecision(12);
 
@@ -97,46 +57,11 @@
 
    const normalizeDistributionRange = (x, p) => [x, p];
 
-   // const statValues = (data) => {
-   //    // const values = [(expectedValue = 0), (variance = 0), (sigma = 0)];
-   //    const values = {
-   //       expectedValue: 0,
-   //       variance: 0,
-   //       sigma: 0,
-   //    };
-   //    const buf = [].concat(...data);
-   //    for (let index = 0; index < buf.length / 2; index += 1) {
-   //       values.expectedValue += buf[index] * buf[index + buf.length / 2];
-   //       values.variance += buf[index] ** 2 * buf[index + buf.length / 2];
-   //    }
-
-   //    values.variance -= values.expectedValue ** 2;
-
-   //    values.sigma = Math.sqrt(values.variance);
-
-   //    return values;
-   // };
-
-   // const correlation = (x, y, data, mx, my) => {
-   //    const headers = [x, y];
-   //    const dataLine = [].concat(...data);
-   //    let sum = 0;
-   //    let i = 0;
-   //    for (let j = 0; j < headers[0].length; j += 1) {
-   //       for (let k = 0; k < headers[1].length; k += 1) {
-   //          sum += dataLine[i] * headers[1][j] * headers[0][k];
-   //          i += 1;
-   //       }
-   //    }
-
-   //    return numberNormalise(sum - mx * my);
-   // };
-
    const expectedValue = (x) => {
       let value = 0;
-      const buf = [].concat(...x);
-      for (let index = 0; index < buf.length / 2; index += 1) {
-         value += buf[index] * buf[index + buf.length / 2];
+      const buffer = [].concat(...x);
+      for (let index = 0; index < buffer.length / 2; index += 1) {
+         value += buffer[index] * buffer[index + buffer.length / 2];
       }
 
       return value;
@@ -144,9 +69,9 @@
 
    const variance = (x) => {
       let value = 0;
-      const buf = [].concat(...x);
-      for (let index = 0; index < buf.length / 2; index += 1) {
-         value += buf[index] ** 2 * buf[index + buf.length / 2];
+      const buffer = [].concat(...x);
+      for (let index = 0; index < buffer.length / 2; index += 1) {
+         value += buffer[index] ** 2 * buffer[index + buffer.length / 2];
       }
 
       return value - expectedValue(x) ** 2;
@@ -175,6 +100,8 @@
       try {
          const [data] = [obj.data];
 
+         // createTable(data);
+
          console.table(data);
 
          const check = [].concat(...data).reduce((a, b) => a + b);
@@ -183,6 +110,10 @@
 
          const rowProbability = rowSum(data);
          const columnProbability = columnSum(obj.data);
+         console.log(rowProbability);
+         console.log(columnProbability);
+
+         // console.log(`${rowProbability} / ${columnProbability}`);
 
          const headersLine = [obj.headers.x, obj.headers.y];
          const dataLine = [].concat(...data);
@@ -193,19 +124,26 @@
             columnProbability,
          );
 
+         const xExpectedValue = expectedValue(x);
+         const yExpectedValue = expectedValue(y);
+
          const xVariance = variance(x);
          const yVariance = variance(y);
 
          const correlation = correlation2(headersLine, dataLine, y, x);
-         console.log(xVariance);
-         console.log(yVariance);
-         console.log(correlation);
+
+         console.log(`x exp : ${xExpectedValue}`);
+         console.log(`y exp : ${yExpectedValue}`);
+
+         console.log(`x var : ${xVariance}`);
+         console.log(`y var : ${yVariance}`);
+         console.log(`correlation : ${correlation}`);
       } catch (error) {
          console.log(error.stack);
       }
    };
 
-   start(config.randomVariables[1]);
+   start(config.randomVariables[currentData]);
 
    // const start = () => {
    //    const headers = config.randomVariables[0].headers;
