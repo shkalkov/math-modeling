@@ -1,8 +1,9 @@
 // @ts-nocheck
 import config from './config.js';
+import { drawRandomNumbers } from './charts.js';
 
 (function() {
-   const currentData = 1;
+   const currentData = 4;
 
    function createTable(tableData) {
       const table = document.createElement('table');
@@ -96,9 +97,38 @@ import config from './config.js';
       );
    };
 
+   const conditionalProbabilityDistribution1 = (data, probability) => {
+      const matrix = [];
+      for (let i = 0; i < probability.length; i++) {
+         matrix.push([]);
+         const element = probability[i];
+
+         for (let j = 0; j < data[0].length; j++) {
+            matrix[i].push(data[j][i] / element);
+         }
+      }
+
+      return matrix;
+   };
+
+   const conditionalProbabilityDistribution2 = (data, probability) => {
+      const matrix = [];
+      for (let i = 0; i < probability.length; i++) {
+         matrix.push([]);
+         const element = probability[i];
+
+         for (let j = 0; j < data[0].length; j++) {
+            matrix[i].push(data[i][j] / element);
+         }
+      }
+
+      return matrix;
+   };
+
    const start = (obj) => {
       try {
          const [data] = [obj.data];
+         const res = Object.values(obj.headers);
 
          // createTable(data);
 
@@ -110,8 +140,8 @@ import config from './config.js';
 
          const rowProbability = rowSum(data);
          const columnProbability = columnSum(obj.data);
-         console.log(rowProbability);
-         console.log(columnProbability);
+         console.log(`X probability: ${rowProbability}`);
+         console.log(`Y probability: ${columnProbability}`);
 
          const headersLine = [obj.headers.x, obj.headers.y];
          const dataLine = [].concat(...data);
@@ -136,6 +166,17 @@ import config from './config.js';
          console.log(`x var : ${xVariance}`);
          console.log(`y var : ${yVariance}`);
          console.log(`correlation : ${correlation}`);
+
+         console.table(
+            conditionalProbabilityDistribution1(data, columnProbability),
+         );
+
+         console.table(
+            conditionalProbabilityDistribution2(data, rowProbability),
+         );
+
+         drawRandomNumbers('rowProb', rowProbability, res[1]);
+         drawRandomNumbers('colProb', columnProbability, res[0]);
       } catch (error) {
          console.log(error.stack);
       }

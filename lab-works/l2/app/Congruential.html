@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>L2 / Congruential</title>
-  <script src="../../../node_modules/chart.js/dist/Chart.bundle.min.js" async></script>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script> -->
+  <!-- <script src="../../../node_modules/chart.js/dist/Chart.bundle.min.js" async></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   <script src="./js/bundle.js" async></script>
   <script src="./js/vue.min.js" defer></script>
   <link rel="stylesheet" href="./css/style.css">
@@ -17,50 +17,9 @@
   <main class="wrapper">
     <div class="row">
       <div class="charts">
-        <canvas id="randomDigitsChart"></canvas>
+        <canvas id="rowProb"></canvas>
         <br>
-        <canvas id="bar"></canvas>
-      </div>
-      <div class="control">
-        <input type="text" name="count" id="countOfDigits" value="1000">
-        <input type="text" name="count" id="countOfIntervals" value="">
-        <button id="btn-generate">Generate</button>
-
-        <table>
-          <tr>
-            <td>Expected Value</td>
-            <td>Variance</td>
-          </tr>
-          <tr>
-            <td id="expected"></td>
-            <td id="variance"></td>
-          </tr>
-        </table>
-        <div class="history-block">
-          <table id="history">
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Expected value</th>
-                <th>Variance</th>
-              </tr>
-            </thead>
-            <tbody v-for="row in rows">
-              <tr>
-                <td>{{row.seed}}</td>
-                <td rowspan="3">{{row.expectedValu}}</td>
-                <td rowspan="3">{{row.varianc}}</td>
-              </tr>
-              <tr>
-                <td>{{row.multiplier}}</td>
-              </tr>
-              <tr>
-                <td>{{row.modulo}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
+        <canvas id="colProb"></canvas>
       </div>
     </div>
   </main>
