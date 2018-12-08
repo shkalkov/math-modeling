@@ -1,29 +1,9 @@
 // @ts-nocheck
 import config from './config.js';
-import { drawRandomNumbers } from './charts.js';
+import drawRandomNumbers from './charts.js';
 
 (function() {
-   const currentData = 4;
-
-   function createTable(tableData) {
-      const table = document.createElement('table');
-      const tableBody = document.createElement('tbody');
-
-      tableData.forEach((rowData) => {
-         const row = document.createElement('tr');
-
-         rowData.forEach((cellData) => {
-            const cell = document.createElement('td');
-            cell.appendChild(document.createTextNode(cellData));
-            row.appendChild(cell);
-         });
-
-         tableBody.appendChild(row);
-      });
-
-      table.appendChild(tableBody);
-      document.body.appendChild(table);
-   }
+   const currentData = 1;
 
    const numberNormalise = (number) => +parseFloat(number).toPrecision(12);
 
@@ -99,11 +79,11 @@ import { drawRandomNumbers } from './charts.js';
 
    const conditionalProbabilityDistribution1 = (data, probability) => {
       const matrix = [];
-      for (let i = 0; i < probability.length; i++) {
+      for (let i = 0; i < probability.length; i += 1) {
          matrix.push([]);
          const element = probability[i];
 
-         for (let j = 0; j < data[0].length; j++) {
+         for (let j = 0; j < data[0].length; j += 1) {
             matrix[i].push(data[j][i] / element);
          }
       }
@@ -113,11 +93,11 @@ import { drawRandomNumbers } from './charts.js';
 
    const conditionalProbabilityDistribution2 = (data, probability) => {
       const matrix = [];
-      for (let i = 0; i < probability.length; i++) {
+      for (let i = 0; i < probability.length; i += 1) {
          matrix.push([]);
          const element = probability[i];
 
-         for (let j = 0; j < data[0].length; j++) {
+         for (let j = 0; j < data[0].length; j += 1) {
             matrix[i].push(data[i][j] / element);
          }
       }
@@ -183,88 +163,4 @@ import { drawRandomNumbers } from './charts.js';
    };
 
    start(config.randomVariables[currentData]);
-
-   // const start = () => {
-   //    const headers = config.randomVariables[0].headers;
-   //    const headerX = config.randomVariables[0].headers.x;
-   //    const headerY = config.randomVariables[0].headers.y;
-   //    const data = config.randomVariables[0].data;
-
-   //    const headersLine = [headerX, headerY];
-
-   //    const dataLine = [].concat(...data);
-
-   //    console.log(
-   //       correlation2(
-   //          headersLine,
-   //          dataLine,
-   //          normalizeDistributionRange(
-   //             config.randomVariables[0].headers.y,
-   //             rowSum(config.randomVariables[0].data),
-   //          ),
-   //          normalizeDistributionRange(
-   //             config.randomVariables[0].headers.x,
-   //             columnSum(config.randomVariables[0].data),
-   //          ),
-   //       ),
-   //    );
-
-   //    // console.log(
-   //    //    correlation(
-   //    //       headerX,
-   //    //       headerY,
-   //    //       dataLine,
-   //    //       statValues(
-   //    //          normalizeDistributionRange(
-   //    //             config.randomVariables[0].headers.y,
-   //    //             calculateRowDistributonRange(config.randomVariables[0].data),
-   //    //          ),
-   //    //       ).expectedValue,
-   //    //       statValues(
-   //    //          normalizeDistributionRange(
-   //    //             config.randomVariables[0].headers.x,
-   //    //             calculateColumnDistributonRange(
-   //    //                config.randomVariables[0].data,
-   //    //             ),
-   //    //          ),
-   //    //       ).expectedValue,
-   //    //    ),
-   //    // );
-
-   //    // console.log(
-   //    //    statValues(
-   //    //       normalizeDistributionRange(
-   //    //          config.randomVariables[0].headers.y,
-   //    //          rowSum(config.randomVariables[0].data),
-   //    //       ),
-   //    //    ),
-   //    // );
-
-   //    // console.log(
-   //    //    statValues(
-   //    //       normalizeDistributionRange(
-   //    //          config.randomVariables[0].headers.x,
-   //    //          columnSum(config.randomVariables[0].data),
-   //    //       ),
-   //    //    ),
-   //    // );
-
-   //    // console.table(
-   //    //    calculateRowDistributonRange(config.randomVariables[0].data),
-   //    // );
-   //    // console.log(calculateColumnDistributonRange(config.data));
-   //    // const a = normalizeDistributionRange(
-   //    //    config.randomVariables[0].headers.x,
-   //    //    calculateColumnDistributonRange(config.randomVariables[0].data),
-   //    // );
-
-   //    // console.table(statValues(config.randomVariables[0].data));
-
-   //    // const check = [].concat(...config.data).reduce((a, b) => a + b);
-   //    // console.log(check);
-   // };
-
-   // start();
-
-   // window.onload = () => {};
 })();
